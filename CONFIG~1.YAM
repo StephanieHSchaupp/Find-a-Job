@@ -177,7 +177,7 @@ locations:
 
 # --- Output ---------------------------------------------------------------
 output:
-  google_sheet_id: ""            # paste your Sheet ID here
-  email_to: "sschaupp@rivianvw.tech"
-  email_from: ""                 # your Gmail address
+  google_sheet_id: "1muC_QlQm9b1PVzO0P84eHhItuRiv9fbQXCPczGVz34o"            # paste your Sheet ID here
+  email_to: "stephanieschaupp2@berkeley.edu"
+  email_from: "stephanieschaupp2@berkeley.edu"                 # your Gmail address
   digest_only: false             # true = never send instant emails, just the daily digest
