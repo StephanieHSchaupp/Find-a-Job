@@ -1,0 +1,183 @@
+# ============================================================
+# Job Scout config — edit this file, no code changes needed
+# ============================================================
+
+# --- Companies to watch ---------------------------------------------------
+# Each company has a `type` (which ATS) and an identifier.
+# Add new ones by finding their ATS (see README "How to find a company's ATS").
+companies:
+
+  # ---- Your targets ------------------------------------------------------
+  - {name: "Rivian-VW JV",       type: ashby,      token: rivianvw.tech}
+  - {name: "Waymo",              type: greenhouse, token: waymo}
+  - {name: "SpaceX",             type: greenhouse, token: spacex}          # ITAR / US-person
+  - {name: "Marvell",            type: workday,    host: marvell.wd1.myworkdayjobs.com, tenant: marvell, site: MarvellCareers}
+
+  # ---- Automotive / EV / AV ---------------------------------------------
+  - {name: "Lucid Motors",       type: greenhouse, token: lucidmotors}
+  - {name: "Aurora",             type: greenhouse, token: aurorainnovation}
+  - {name: "Nuro",               type: greenhouse, token: nuro}
+  - {name: "Scout Motors",       type: greenhouse, token: scoutmotors}
+  - {name: "Harbinger Motors",   type: greenhouse, token: harbingermotors}
+  - {name: "Zoox",               type: lever,      token: zoox}
+  - {name: "Waabi",              type: lever,      token: waabi}
+  - {name: "Aptiv",              type: workday,    host: aptiv.wd5.myworkdayjobs.com, tenant: aptiv, site: APTIV_CAREERS}
+
+  # ---- Aerospace / space / defense (most are ITAR / US-person) ----------
+  - {name: "Archer Aviation",    type: greenhouse, token: archer56}
+  - {name: "Anduril",            type: greenhouse, token: andurilindustries}
+  - {name: "Relativity Space",   type: greenhouse, token: relativity}
+  - {name: "Rocket Lab",         type: greenhouse, token: rocketlab}
+  - {name: "Stoke Space",        type: greenhouse, token: stokespacetechnologies}
+  - {name: "Ursa Major",         type: greenhouse, token: ursamajor}
+  - {name: "Loft Orbital",       type: lever,      token: loftorbital}
+  - {name: "Gravitics",          type: lever,      token: graviticsspace}
+  - {name: "Blue Origin",        type: workday,    host: blueorigin.wd5.myworkdayjobs.com, tenant: blueorigin, site: BlueOrigin}
+  - {name: "Sierra Space",       type: workday,    host: sierraspace.wd1.myworkdayjobs.com, tenant: sierraspace, site: Sierra_Space_External_Career_Site}
+  - {name: "Northrop Grumman",   type: workday,    host: ngc.wd1.myworkdayjobs.com, tenant: ngc, site: Northrop_Grumman_External_Site}
+  - {name: "Boeing",             type: workday,    host: boeing.wd1.myworkdayjobs.com, tenant: boeing, site: EXTERNAL_CAREERS}
+  - {name: "RTX (Raytheon)",     type: workday,    host: globalhr.wd5.myworkdayjobs.com, tenant: globalhr, site: REC_RTX_Ext_Gateway}
+
+  # ---- Semiconductor / power electronics --------------------------------
+  - {name: "Renesas",            type: smartrecruiters, token: RenesasElectronics}
+  - {name: "Analog Devices",     type: workday,    host: analogdevices.wd1.myworkdayjobs.com, tenant: analogdevices, site: External}
+  - {name: "Wolfspeed",          type: workday,    host: cree.wd5.myworkdayjobs.com, tenant: cree, site: EXT}
+  - {name: "NXP",                type: workday,    host: nxp.wd3.myworkdayjobs.com, tenant: nxp, site: careers}
+
+  # ---- Energy / grid / storage / solar ----------------------------------
+  - {name: "GE Vernova",         type: workday,    host: gevernova.wd5.myworkdayjobs.com, tenant: gevernova, site: Vernova_ExternalSite}
+  - {name: "Fluence",            type: workday,    host: aes.wd1.myworkdayjobs.com, tenant: aes, site: Fluence}
+  - {name: "Stem",               type: workday,    host: stem.wd12.myworkdayjobs.com, tenant: stem, site: StemInc}
+  - {name: "Nextracker",         type: workday,    host: nextracker.wd5.myworkdayjobs.com, tenant: nextracker, site: nextracker_careers}
+  - {name: "Form Energy",        type: ashby,      token: formenergy}
+  - {name: "Span",               type: ashby,      token: span}
+  - {name: "Base Power",         type: ashby,      token: base-power}
+  - {name: "Redwood Materials",  type: greenhouse, token: redwoodmaterials}
+  - {name: "ChargePoint",        type: greenhouse, token: chargepoint}
+  - {name: "InCharge Energy",    type: greenhouse, token: inchargeenergy}
+  - {name: "Electric Hydrogen",  type: greenhouse, token: electrichydrogen}
+  - {name: "Antora Energy",      type: greenhouse, token: antora}          # feed flagged deprecated; re-verify
+
+  # ---- Smaller / early-stage (power electronics, storage, propulsion) ----
+  - {name: "Peak Energy",        type: greenhouse, token: peakenergy}
+  - {name: "Group14",            type: greenhouse, token: group14}
+  - {name: "Sila Nanotech",      type: greenhouse, token: silananotechnologies}
+  - {name: "Arc Boat Company",   type: greenhouse, token: arcboatcompany}
+  - {name: "Astro Mechanica",    type: ashby,      token: Astro-Mechanica}  # token is case-sensitive
+  - {name: "Apex Space",         type: ashby,      token: apex-technology-inc}
+  - {name: "GridCARE",           type: ashby,      token: gridcare}
+
+  # ---- No clean public feed (custom / iCIMS / Jobvite / Oracle) ----------
+  # These need per-vendor scraping or an aggregator; left off for now:
+  #   Tesla (custom), Rivian main (iCIMS), Joby (iCIMS), Lockheed (Phenom),
+  #   Enphase / Power Integrations / EVgo (Jobvite), Navitas (Paycom),
+  #   Vicor / QuantumScape (SuccessFactors), onsemi / TI / First Solar (Oracle),
+  #   Bosch (SmartRecruiters 'BoschGroup' — add if you want, filter to US),
+  #   Magna, SolarEdge. See SETUP.md "Companies without a clean feed".
+
+
+# --- What counts as a match -----------------------------------------------
+# A job is a STRONG match if a primary keyword appears in the TITLE.
+# It's a POSSIBLE match if a keyword appears only in the description.
+roles:
+  power_electronics:
+    - "power electronics"
+    - "inverter"
+    - "dc-dc"
+    - "dc dc"
+    - "motor drive"
+    - "traction"
+    - "power stage"
+    - "sic"
+    - "gan"
+    - "onboard charger"
+    - "obc"
+    - "bms"
+  hardware_validation:
+    - "hardware validation"
+    - "hw validation"
+    - "board bring-up"
+    - "bring up"
+    - "validation engineer"
+    - "dvt"
+    - "evt"
+  systems_engineering:
+    - "systems engineer"
+    - "system engineering"
+    - "integration engineer"
+    - "verification and validation"
+    - "v&v"
+  test_engineering:
+    - "test engineer"
+    - "test engineering"
+    - "characterization"
+    - "reliability engineer"
+    - "ate "
+
+# Drop a job if the title contains any of these (case-insensitive).
+exclude_title:
+  - "sales"
+  - "recruiter"
+
+
+# --- Early career / new grad filter ---------------------------------------
+# Only roles that pass this filter are kept. See matcher.py for the logic.
+early_career:
+  # Hard reject: if the TITLE contains any of these, it's too senior.
+  seniority_exclusions:
+    - "senior"
+    - "sr."
+    - "staff"
+    - "principal"
+    - "lead"
+    - "manager"
+    - "director"
+    - "expert"
+    - "distinguished"
+    - "head of"
+    - "vp"
+    - "iii"          # Engineer III and up = too senior
+    - "iv"
+    - "intern"       # you want new grad, not intern (remove if you want interns too)
+
+  # Strong positive signals of an early-career role (checked in title + description).
+  signals:
+    - "new grad"
+    - "new graduate"
+    - "recent graduate"
+    - "early career"
+    - "early-career"
+    - "early in career"
+    - "entry level"
+    - "entry-level"
+    - "university graduate"
+    - "college graduate"
+    - "associate engineer"
+    - "engineer i"
+    - "engineer 1"
+    - "junior"
+    - "rotational"
+    - "new college grad"
+
+  # Reject if the description requires MORE than this many years of experience.
+  max_years_experience: 2
+
+  # true  = only keep roles with a clear early-career signal (fewer, higher confidence)
+  # false = also keep roles with no level info at all, tagged "level unclear"
+  strict: false
+
+# Only keep jobs whose location matches one of these substrings.
+# Leave empty [] to accept any location.
+locations:
+  - "United States"
+  - "USA"
+  - "CA"
+  - "Remote"
+
+
+# --- Output ---------------------------------------------------------------
+output:
+  google_sheet_id: ""            # paste your Sheet ID here
+  email_to: "sschaupp@rivianvw.tech"
+  email_from: ""                 # your Gmail address
+  digest_only: false             # true = never send instant emails, just the daily digest
