@@ -1,18 +1,21 @@
 # ============================================================
 # Job Scout config — edit this file, no code changes needed
 # ============================================================
+# Filter order (see matcher.py):
+#   exclude_title -> location -> discipline -> role keywords -> early career
+#
+# NOTE: every list here is matched on WHOLE WORDS now, not substrings.
+# "gan" no longer matches "orGANization", "iv" no longer matches "drIVe".
 
 # --- Companies to watch ---------------------------------------------------
 # Each company has a `type` (which ATS) and an identifier.
 # Add new ones by finding their ATS (see README "How to find a company's ATS").
 companies:
-
   # ---- Your targets ------------------------------------------------------
   - {name: "Rivian-VW JV",       type: ashby,      token: rivianvw.tech}
   - {name: "Waymo",              type: greenhouse, token: waymo}
   - {name: "SpaceX",             type: greenhouse, token: spacex}          # ITAR / US-person
   - {name: "Marvell",            type: workday,    host: marvell.wd1.myworkdayjobs.com, tenant: marvell, site: MarvellCareers}
-
   # ---- Automotive / EV / AV ---------------------------------------------
   - {name: "Lucid Motors",       type: greenhouse, token: lucidmotors}
   - {name: "Aurora",             type: greenhouse, token: aurorainnovation}
@@ -22,7 +25,6 @@ companies:
   - {name: "Zoox",               type: lever,      token: zoox}
   - {name: "Waabi",              type: lever,      token: waabi}
   - {name: "Aptiv",              type: workday,    host: aptiv.wd5.myworkdayjobs.com, tenant: aptiv, site: APTIV_CAREERS}
-
   # ---- Aerospace / space / defense (most are ITAR / US-person) ----------
   - {name: "Archer Aviation",    type: greenhouse, token: archer56}
   - {name: "Anduril",            type: greenhouse, token: andurilindustries}
@@ -37,13 +39,11 @@ companies:
   - {name: "Northrop Grumman",   type: workday,    host: ngc.wd1.myworkdayjobs.com, tenant: ngc, site: Northrop_Grumman_External_Site}
   - {name: "Boeing",             type: workday,    host: boeing.wd1.myworkdayjobs.com, tenant: boeing, site: EXTERNAL_CAREERS}
   - {name: "RTX (Raytheon)",     type: workday,    host: globalhr.wd5.myworkdayjobs.com, tenant: globalhr, site: REC_RTX_Ext_Gateway}
-
   # ---- Semiconductor / power electronics --------------------------------
   - {name: "Renesas",            type: smartrecruiters, token: RenesasElectronics}
   - {name: "Analog Devices",     type: workday,    host: analogdevices.wd1.myworkdayjobs.com, tenant: analogdevices, site: External}
   - {name: "Wolfspeed",          type: workday,    host: cree.wd5.myworkdayjobs.com, tenant: cree, site: EXT}
   - {name: "NXP",                type: workday,    host: nxp.wd3.myworkdayjobs.com, tenant: nxp, site: careers}
-
   # ---- Energy / grid / storage / solar ----------------------------------
   - {name: "GE Vernova",         type: workday,    host: gevernova.wd5.myworkdayjobs.com, tenant: gevernova, site: Vernova_ExternalSite}
   - {name: "Fluence",            type: workday,    host: aes.wd1.myworkdayjobs.com, tenant: aes, site: Fluence}
@@ -57,7 +57,6 @@ companies:
   - {name: "InCharge Energy",    type: greenhouse, token: inchargeenergy}
   - {name: "Electric Hydrogen",  type: greenhouse, token: electrichydrogen}
   - {name: "Antora Energy",      type: greenhouse, token: antora}          # feed flagged deprecated; re-verify
-
   # ---- Smaller / early-stage (power electronics, storage, propulsion) ----
   - {name: "Peak Energy",        type: greenhouse, token: peakenergy}
   - {name: "Group14",            type: greenhouse, token: group14}
@@ -66,7 +65,6 @@ companies:
   - {name: "Astro Mechanica",    type: ashby,      token: Astro-Mechanica}  # token is case-sensitive
   - {name: "Apex Space",         type: ashby,      token: apex-technology-inc}
   - {name: "GridCARE",           type: ashby,      token: gridcare}
-
   # ---- No clean public feed (custom / iCIMS / Jobvite / Oracle) ----------
   # These need per-vendor scraping or an aggregator; left off for now:
   #   Tesla (custom), Rivian main (iCIMS), Joby (iCIMS), Lockheed (Phenom),
@@ -75,6 +73,333 @@ companies:
   #   Bosch (SmartRecruiters 'BoschGroup' — add if you want, filter to US),
   #   Magna, SolarEdge. See SETUP.md "Companies without a clean feed".
 
+# ==========================================================================
+# DISCIPLINE FILTER — keeps mechanical / thermal / finance / ops roles out
+# ==========================================================================
+discipline:
+  enabled: true
+
+  # How the EE gate is applied:
+  #   title_or_description = EE signal must appear in the title, or (if the
+  #                          title is neutral) somewhere in the description
+  #   title                = EE signal must be in the TITLE. Much stricter.
+  ee_gate: title_or_description
+
+  # Workday and SmartRecruiters feeds return NO description (see sources/).
+  # For those, an EE signal can't be verified from the description.
+  #   true  = keep them, tagged "EE unverified" — unless the title is in
+  #           `ambiguous_titles` below, which is always dropped
+  #   false = drop anything you can't verify
+  allow_when_no_description: true
+
+  # ---- Hard reject if any of these appear in the job TITLE ---------------
+  exclude_title:
+    # -- Mechanical / thermal / structural --
+    - "mechanical"
+    - "mechanism"
+    - "thermal"
+    - "heat transfer"
+    - "fluid"
+    - "fluids"
+    - "structural"
+    - "structures"
+    - "stress"
+    - "cad"
+    - "solidworks"
+    - "catia"
+    - "creo"
+    - "gd&t"
+    - "hvac"
+    - "machining"
+    - "machinist"
+    - "weld"
+    - "welding"
+    - "tooling"
+    - "fixture"
+    - "mold"
+    - "casting"
+    - "composites"
+    - "sheet metal"
+    - "additive manufacturing"
+    - "ergonomics"
+    - "vehicle dynamics"
+    - "chassis"
+    - "suspension"
+    - "brake"
+    - "brakes"
+    - "seating"
+    - "body engineering"
+    - "closures"
+    - "interior"
+    - "exterior"
+    - "aerodynamics"
+    - "aerodynamic"
+    - "aero"
+    - "combustion"
+    - "turbomachinery"
+    - "turbine"
+    - "valve"
+    - "fastener"
+    - "propulsion"        # remove this line if you want propulsion roles
+    # -- Materials / chemical --
+    - "chemical"
+    - "chemist"
+    - "chemistry"
+    - "materials engineer"
+    - "materials scientist"
+    - "metallurgy"
+    - "metallurgical"
+    - "polymer"
+    - "coatings"
+    - "electrochemical"
+    - "electrochemistry"
+    # -- Civil / industrial / facilities --
+    - "civil"
+    - "environmental"
+    - "industrial engineer"
+    - "facilities"
+    - "construction"
+    - "architectural"
+    - "geotechnical"
+    - "surveyor"
+    - "ehs"
+    - "safety engineer"
+    # -- Finance / accounting --
+    # NOTE: "controller" is deliberately NOT here — it's an EE word
+    # ("motor controller", "controls engineer").
+    - "finance"
+    - "financial"
+    - "accounting"
+    - "accountant"
+    - "fp&a"
+    - "treasury"
+    - "payroll"
+    - "tax"
+    - "audit"
+    - "auditor"
+    - "investment"
+    - "investor"
+    - "equity research"
+    - "underwriting"
+    - "actuarial"
+    - "banking"
+    - "trading"
+    - "trader"
+    - "billing"
+    - "pricing"
+    - "revenue"
+    - "cost analyst"
+    - "quantitative analyst"
+    # -- Business / ops / admin --
+    - "sales"
+    - "recruiter"
+    - "recruiting"
+    - "marketing"
+    - "brand"
+    - "communications"
+    - "public relations"
+    - "legal"
+    - "counsel"
+    - "paralegal"
+    - "compliance"
+    - "human resources"
+    - "talent"
+    - "people operations"
+    - "customer success"
+    - "customer support"
+    - "account executive"
+    - "account manager"
+    - "business development"
+    - "business analyst"
+    - "procurement"
+    - "buyer"
+    - "sourcing"
+    - "supply chain"
+    - "logistics"
+    - "warehouse"
+    - "inventory"
+    - "executive assistant"
+    - "office coordinator"
+    - "scheduler"
+    - "planner"
+    # -- Software roles that aren't hardware/firmware ------------------------
+    # Firmware / embedded are intentionally NOT excluded.
+    - "full stack"
+    - "fullstack"
+    - "frontend"
+    - "front end"
+    - "backend"
+    - "back end"
+    - "web developer"
+    - "mobile"
+    - "ios"
+    - "android"
+    - "devops"
+    - "site reliability"
+    - "data engineer"
+    - "data scientist"
+    - "machine learning"
+    - "deep learning"
+    - "perception"
+    - "motion planning"
+    - "behavior prediction"
+    - "infrastructure engineer"
+    - "platform engineer"
+    - "security engineer"
+    # -- Non-engineer roles (delete if you'd take a technician job) ---------
+    - "technician"
+    - "operator"
+    - "assembler"
+    - "welder"
+    - "inspector"
+
+  # ---- Hard reject if any of these appear ANYWHERE (title + description) --
+  # Be very careful here: one stray word in a long description kills the job.
+  # Leave empty unless you have a specific phrase you never want to see.
+  exclude_text: []
+  #  - "mechanical engineering degree required"
+
+  # ---- Discipline-neutral titles ----------------------------------------
+  # These titles say nothing about EE vs ME. If the description is available,
+  # the EE gate decides. If the feed has NO description (Workday /
+  # SmartRecruiters), the job is dropped rather than guessed at.
+  ambiguous_titles:
+    - "systems engineer"
+    - "system engineer"
+    - "test engineer"
+    - "validation engineer"
+    - "verification engineer"
+    - "integration engineer"
+    - "design engineer"
+    - "development engineer"
+    - "product engineer"
+    - "project engineer"
+    - "process engineer"
+    - "manufacturing engineer"
+    - "production engineer"
+    - "quality engineer"
+    - "reliability engineer"
+    - "r&d engineer"
+    - "research engineer"
+    - "associate engineer"
+    - "graduate engineer"
+    - "engineer in training"
+    - "rotational engineer"
+    - "field engineer"
+    - "applications engineer"
+    - "simulation engineer"
+    - "engineering rotational program"
+    - "engineering development program"
+
+  # ---- EE signals — at least one must appear (title, else description) ---
+  ee_signals:
+    - "electrical"
+    - "electrical engineering"
+    - "electronics"
+    - "electronic"
+    - "ee"
+    - "power electronics"
+    - "power conversion"
+    - "power converter"
+    - "power supply"
+    - "power stage"
+    - "converter"
+    - "inverter"
+    - "rectifier"
+    - "dc-dc"
+    - "ac-dc"
+    - "buck"
+    - "boost converter"
+    - "motor drive"
+    - "motor control"
+    - "traction inverter"
+    - "onboard charger"
+    - "obc"
+    - "battery management"
+    - "bms"
+    - "mppt"
+    - "gate driver"
+    - "magnetics"
+    - "transformer"
+    - "inductor"
+    - "capacitor"
+    - "mosfet"
+    - "igbt"
+    - "sic"
+    - "gan"
+    - "wide bandgap"
+    - "semiconductor"
+    - "silicon"
+    - "wafer"
+    - "transistor"
+    - "analog"
+    - "mixed signal"
+    - "digital design"
+    - "rtl"
+    - "verilog"
+    - "vhdl"
+    - "fpga"
+    - "asic"
+    - "soc"
+    - "mcu"
+    - "microcontroller"
+    - "dsp"
+    - "adc"
+    - "dac"
+    - "amplifier"
+    - "hardware"
+    - "hardware design"
+    - "firmware"
+    - "embedded"
+    - "circuit"
+    - "circuits"
+    - "schematic"
+    - "pcb"
+    - "pcba"
+    - "printed circuit"
+    - "board design"
+    - "board bring-up"
+    - "altium"
+    - "cadence"
+    - "allegro"
+    - "orcad"
+    - "kicad"
+    - "ltspice"
+    - "spice"
+    - "oscilloscope"
+    - "network analyzer"
+    - "signal integrity"
+    - "power integrity"
+    - "emc"
+    - "emi"
+    - "esd"
+    - "wiring harness"
+    - "harness"
+    - "connector"
+    - "high voltage"
+    - "low voltage"
+    - "switchgear"
+    - "relay"
+    - "contactor"
+    - "grid"
+    - "power system"
+    - "power systems"
+    - "power distribution"
+    - "substation"
+    - "photovoltaic"
+    - "solar inverter"
+    - "avionics"
+    - "instrumentation"
+    - "data acquisition"
+    - "daq"
+    - "i2c"
+    - "spi"
+    - "can bus"
+    - "uart"
+    - "rf"
+    - "antenna"
+    - "microwave"
+    - "sensor"
 
 # --- What counts as a match -----------------------------------------------
 # A job is a STRONG match if a primary keyword appears in the TITLE.
@@ -82,25 +407,38 @@ companies:
 roles:
   power_electronics:
     - "power electronics"
+    - "power conversion"
     - "inverter"
+    - "converter"
+    - "rectifier"
     - "dc-dc"
-    - "dc dc"
+    - "ac-dc"
     - "motor drive"
+    - "motor control"
     - "traction"
     - "power stage"
+    - "gate driver"
+    - "magnetics"
     - "sic"
     - "gan"
+    - "wide bandgap"
     - "onboard charger"
     - "obc"
     - "bms"
+    - "battery management"
+    - "high voltage"
+    - "mppt"
   hardware_validation:
     - "hardware validation"
     - "hw validation"
+    - "hardware test"
     - "board bring-up"
-    - "bring up"
+    - "bring-up"
     - "validation engineer"
     - "dvt"
     - "evt"
+    - "signal integrity"
+    - "power integrity"
   systems_engineering:
     - "systems engineer"
     - "system engineering"
@@ -112,13 +450,14 @@ roles:
     - "test engineering"
     - "characterization"
     - "reliability engineer"
-    - "ate "
+    - "ate"                      # was "ate " — used to match "graduATE "
+    - "automated test equipment"
 
-# Drop a job if the title contains any of these (case-insensitive).
+# Drop a job if the title contains any of these (case-insensitive, whole word).
+# The big discipline block above does most of the work now; this is a backstop.
 exclude_title:
   - "sales"
   - "recruiter"
-
 
 # --- Early career / new grad filter ---------------------------------------
 # Only roles that pass this filter are kept. See matcher.py for the logic.
@@ -127,6 +466,7 @@ early_career:
   seniority_exclusions:
     - "senior"
     - "sr."
+    - "sr"
     - "staff"
     - "principal"
     - "lead"
@@ -136,9 +476,17 @@ early_career:
     - "distinguished"
     - "head of"
     - "vp"
-    - "iii"          # Engineer III and up = too senior
-    - "iv"
-    - "intern"       # you want new grad, not intern (remove if you want interns too)
+    - "president"
+    - "supervisor"
+    - "fellow"
+    - "intern"        # you want new grad, not intern (remove if you want interns too)
+    - "internship"
+    - "co-op"
+    - "coop"
+    # NOTE: "iii" / "iv" / "ii" are NOT listed here on purpose.
+    # matcher.py detects trailing level tokens ("Engineer II", "Engineer III,
+    # Power") with a proper regex. Putting "iv" in this list is what was
+    # rejecting "Motor DrIVe Engineer".
 
   # Strong positive signals of an early-career role (checked in title + description).
   signals:
@@ -158,22 +506,104 @@ early_career:
     - "junior"
     - "rotational"
     - "new college grad"
+    - "0-2 years"
+    - "0-3 years"
 
   # Reject if the description requires MORE than this many years of experience.
+  # (Only counts when the number is near experience-ish words, so
+  # "founded 10 years ago" no longer disqualifies a posting.)
   max_years_experience: 2
 
   # true  = only keep roles with a clear early-career signal (fewer, higher confidence)
   # false = also keep roles with no level info at all, tagged "level unclear"
   strict: false
 
-# Only keep jobs whose location matches one of these substrings.
-# Leave empty [] to accept any location.
-locations:
-  - "United States"
-  - "USA"
-  - "CA"
-  - "Remote"
+# --- Location -------------------------------------------------------------
+# Both lists are matched on whole words now, so "CA" matches "Santa Clara, CA"
+# but NOT "chiCAgo" or "CAnada" (which the old substring code let through).
+#
+# `exclude_locations` runs first and is the reliable US-only filter.
+# `locations` is left empty so postings that list only a city ("Hawthorne")
+# aren't dropped. Uncomment the block below if you want to narrow to
+# specific states.
+locations: []
+#  - "United States"
+#  - "USA"
+#  - "US"
+#  - "Remote"
+#  - "CA"
+#  - "California"
+#  - "TX"
+#  - "Texas"
+#  - "WA"
+#  - "Washington"
+#  - "AZ"
+#  - "CO"
+#  - "MI"
+#  - "MA"
+#  - "NM"
 
+exclude_locations:
+  - "canada"
+  - "ontario"
+  - "toronto"
+  - "vancouver"
+  - "montreal"
+  - "mexico"
+  - "guadalajara"
+  - "united kingdom"
+  - "uk"
+  - "england"
+  - "london"
+  - "ireland"
+  - "dublin"
+  - "germany"
+  - "munich"
+  - "berlin"
+  - "france"
+  - "netherlands"
+  - "eindhoven"
+  - "belgium"
+  - "poland"
+  - "romania"
+  - "czech"
+  - "hungary"
+  - "spain"
+  - "portugal"
+  - "italy"
+  - "sweden"
+  - "norway"
+  - "denmark"
+  - "switzerland"
+  - "austria"
+  - "india"
+  - "bangalore"
+  - "bengaluru"
+  - "hyderabad"
+  - "pune"
+  - "noida"
+  - "china"
+  - "shanghai"
+  - "beijing"
+  - "shenzhen"
+  - "taiwan"
+  - "hsinchu"
+  - "japan"
+  - "tokyo"
+  - "korea"
+  - "seoul"
+  - "singapore"
+  - "malaysia"
+  - "penang"
+  - "philippines"
+  - "vietnam"
+  - "israel"
+  - "tel aviv"
+  - "australia"
+  - "sydney"
+  - "brazil"
+  - "emea"
+  - "apac"
 
 # --- Output ---------------------------------------------------------------
 output:
